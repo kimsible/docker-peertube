@@ -25,7 +25,7 @@ USER peertube
 
 RUN yarn install --pure-lockfile \
     && npm run build -- $NPM_RUN_BUILD_OPTS \
-    && rm -r ./node_modules ./client/node_modules \
+    && rm -rf ./node_modules ./client/node_modules \
     && yarn install --pure-lockfile --production \
     && yarn cache clean
 
