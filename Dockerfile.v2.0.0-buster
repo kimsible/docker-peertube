@@ -12,28 +12,30 @@ RUN groupadd -r peertube \
 
 # Install PeerTube
 RUN wget https://github.com/Chocobozzz/PeerTube/releases/download/v2.0.0/peertube-v2.0.0.tar.xz
-RUN tar xf peertube-v2.0.0.tar.xz
-RUN rm peertube-v2.0.0.tar.xz
-
-# Config docker env
-ENV NODE_ENV production
-ENV NODE_CONFIG_DIR /config
-
+RUN tar xf /peertube-v2.0.0.tar.xz
+RUN rm /peertube-v2.0.0.tar.xz
+RUN mv /peertube-v2.0.0 /app
 RUN mkdir /data /config
-VOLUME /data
-VOLUME /config
-
-RUN cp /peertube-v2.0.0/support/docker/production/docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
-ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
 
 # Attribute rights to peertube user
-RUN chown -R peertube:peertube /peertube-v2.0.0 /data /config
+RUN chown -R peertube:peertube /app /data /config
 
 # Install dependencies
-WORKDIR /peertube-v2.0.0
+WORKDIR /app
 USER peertube
 RUN yarn install --production --pure-lockfile
 
-# Run the application
+# Config app env
+USER root
+ENV NODE_ENV production
+ENV NODE_CONFIG_DIR /config
+
+VOLUME /data
+VOLUME /config
+
+RUN cp /app/support/docker/production/docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
+ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
+
+# Run app
 CMD ["npm", "start"]
 EXPOSE 9000
