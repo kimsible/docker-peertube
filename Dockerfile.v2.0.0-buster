@@ -2,7 +2,7 @@ FROM node:10-buster-slim
 
 # Install dependencies
 RUN apt update \
- && apt install -y --no-install-recommends wget xz-utils ffmpeg gnupg gosu \
+ && apt install -y --no-install-recommends wget ca-certificates xz-utils ffmpeg gnupg gosu \
  && gosu nobody true \
  && rm /var/lib/apt/lists/* -fR
 
@@ -11,7 +11,7 @@ RUN groupadd -r peertube \
     && useradd -r -g peertube -m peertube
 
 # Install PeerTube
-RUN wget -q https://github.com/Chocobozzz/PeerTube/releases/download/v2.0.0/peertube-v2.0.0.tar.xz
+RUN wget https://github.com/Chocobozzz/PeerTube/releases/download/v2.0.0/peertube-v2.0.0.tar.xz
 RUN tar xf peertube-v2.0.0.tar.xz
 RUN rm peertube-v2.0.0.tar.xz
 
