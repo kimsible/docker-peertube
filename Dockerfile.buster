@@ -17,6 +17,7 @@ RUN groupadd -r peertube \
 
 # Install PeerTube
 RUN git clone -b master --single-branch https://github.com/chocobozzz/PeerTube --depth 1 /app
+RUN chown -R peertube:peertube /app
 
 WORKDIR /app
 
